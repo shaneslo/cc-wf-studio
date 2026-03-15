@@ -274,9 +274,16 @@ function validateStringValue(
 
   // Check pattern constraint
   if (param.pattern) {
-    const regex = new RegExp(param.pattern);
-    if (!regex.test(value)) {
-      return { valid: false, error: `Value must match pattern: ${param.pattern}` };
+    if (param.pattern.length > 200) {
+      return { valid: false, error: 'Pattern is too long to validate safely' };
+    }
+    try {
+      const regex = new RegExp(param.pattern);
+      if (!regex.test(value)) {
+        return { valid: false, error: `Value must match pattern: ${param.pattern}` };
+      }
+    } catch {
+      return { valid: false, error: `Invalid pattern: ${param.pattern}` };
     }
   }
 

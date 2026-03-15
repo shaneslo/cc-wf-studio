@@ -76,11 +76,9 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({ locale, children }) 
         if (params) {
           for (const paramKey of Object.keys(params)) {
             // Support both {{paramKey}} and {paramKey} formats for backward compatibility
-            text = text.replace(
-              new RegExp(`\\{\\{${paramKey}\\}\\}`, 'g'),
-              String(params[paramKey])
-            );
-            text = text.replace(new RegExp(`\\{${paramKey}\\}`, 'g'), String(params[paramKey]));
+            const replacement = String(params[paramKey]);
+            text = text.split(`{{${paramKey}}}`).join(replacement);
+            text = text.split(`{${paramKey}}`).join(replacement);
           }
         }
 
